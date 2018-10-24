@@ -21,7 +21,6 @@ object Host "{{ fqdn }}" {
   vars.second_level_domains = ["{{ fqdn | regex_search('(?:.+\.)?([^.]+\.(?:com|org|net|coop|space|co.uk))', '\\1') | first }}"]
 
   /* Define http vhost attributes for service apply rules in `services.conf`. */
-{% if sites is defined %}
 {% for site in sites.values() %}
 {% if site.contract_type is search("Maintenance") %}
   vars.http_vhosts["{{ site.bare_url }}"] = {
@@ -33,18 +32,17 @@ object Host "{{ fqdn }}" {
     http_string = "{{ site.website_string }}"
 {% endif %}
     /* CMS/CIVICRM MONITORING */
-{% if site.contract_type is search("(Backdrop|Drupal) Maintenance") %}
+{% if site.contract_type is search("(Backdrop|Drupal) Maintenance") and (site.cms == 'Drupal' or site.cms == 'Backdrop') %}
     drupal_site_id = ""
 {% endif %}
     cms = "{{ site.cms | lower }}"
-{% if site.contract_type is search("Civi Maintenance") %}
+{% if site.contract_type is search("Civi Maintenance") and site.civicrm == 'Yes' %}
     crm_site_key = "{{ lookup('passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/sitekey') }}"
     crm_api_key = "{{ lookup('passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/apikey') }}"
 {% endif %}
   }
 {% endif %}
 {% endfor %}
-{% endif %}
 
   /* Define notification mail attributes for notification apply rules in `notifications.conf`. */
   vars.notification["mail"] = {
