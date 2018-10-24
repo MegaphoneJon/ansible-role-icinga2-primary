@@ -47,7 +47,7 @@ object Host "{{ fqdn }}" {
   /* Define notification mail attributes for notification apply rules in `notifications.conf`. */
   vars.notification["mail"] = {
 
-    groups = [ "megaphone" ]
+    groups = [ {{ notification_groups | default('"megaphone"', true) | replace("&quot;",'"') }} ]
   }
 
   /* LOCAL MONITORING CUSTOM VARS */
