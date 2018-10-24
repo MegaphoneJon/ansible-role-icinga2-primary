@@ -24,7 +24,7 @@ object Host "{{ fqdn }}" {
 {% for site in sites.values() %}
 {% if site.contract_type is search("Maintenance") %}
   vars.http_vhosts["{{ site.bare_url }}"] = {
-    http_uri = "/"
+    http_uri = "{{ site.homepage_uri | default("/",true) }}"
     http_ssl = true
     http_vhost = "{{ site.bare_url }}"
     http_expect = "HTTP/1.1 200 OK"
