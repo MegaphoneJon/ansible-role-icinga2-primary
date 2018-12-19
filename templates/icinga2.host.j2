@@ -21,6 +21,7 @@ object Host "{{ fqdn }}" {
   vars.second_level_domains = ["{{ fqdn | regex_search('(?:.+\.)?([^.]+\.(?:com|org|net|coop|space|co.uk))', '\\1') | first }}"]
 
   /* Define http vhost attributes for service apply rules in `services.conf`. */
+{% if sites is defined %}
 {% for site in sites.values() %}
 {% if site.contract_type is search("Maintenance") %}
   vars.http_vhosts["{{ site.bare_url }}"] = {
@@ -43,6 +44,7 @@ object Host "{{ fqdn }}" {
   }
 {% endif %}
 {% endfor %}
+{% endif %}
 
   /* Define notification mail attributes for notification apply rules in `notifications.conf`. */
   vars.notification["mail"] = {
