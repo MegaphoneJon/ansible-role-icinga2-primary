@@ -4,3 +4,4 @@
     dest: /etc/icinga2/conf.d/hosts/{{ fqdn }}.conf
   delegate_to: "{{ primary_icinga_server }}"
   notify: restart primary icinga
+  become: yes
