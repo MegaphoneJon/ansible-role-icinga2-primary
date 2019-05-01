@@ -56,6 +56,7 @@ object Host "{{ fqdn }}" {
     groups = [ {{ notification_groups | default('"megaphone"', true) | replace("&quot;",'"') }} ]
   }
 
+{% if contract_type is defined and contract_type is search("VPS") %}
   /* LOCAL MONITORING CUSTOM VARS */
   /* Set a custom value for procs warning */
   vars.procs_warning = 310
@@ -68,5 +69,6 @@ object Host "{{ fqdn }}" {
   /* END LOCAL MONITORING CUSTOM VARS */
 
   vars.has_backupninja = true
+{% endif %}
 }
 
