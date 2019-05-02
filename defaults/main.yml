@@ -1,1 +1,2 @@
 primary_icinga: 'orange.megaphonetech.com'
+template_src: 'templates/icinga2.host.j2'
