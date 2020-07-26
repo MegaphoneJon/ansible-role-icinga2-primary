@@ -5,3 +5,5 @@
   delegate_to: "{{ primary_icinga_server }}"
   notify: restart primary icinga
   become: yes
+  vars:
+    ansible_python_interpreter: /usr/bin/python3

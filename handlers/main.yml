@@ -4,6 +4,8 @@
   become: yes
   args:
     warn: false
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
 
 - name: restart satellite icinga
   shell: "service icinga2 checkconfig && service icinga2 restart"
