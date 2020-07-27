@@ -46,7 +46,6 @@ object Host "{{ fqdn }}" {
     crm_api_key = "{{ lookup('passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/apikey') }}"
 {% endif %}
     site_env = "{{ site.env }}"
-    bare_url = "{{ site.bare_url }}"
   }
 {% endif %}
 {% endfor %}
