@@ -53,10 +53,9 @@ object Host "{{ fqdn }}" {
 
   /* Define notification mail attributes for notification apply rules in `notifications.conf`. */
   vars.notification["mail"] = {
-
     groups = [ {{ notification_groups | default('"megaphone"', true) | replace("&quot;",'"') }} ]
+    users_non_urgent = [ "jon" ]
   }
-
 {% if contract_type is defined and contract_type is search("VPS") %}
   /* LOCAL MONITORING CUSTOM VARS */
   /* Set a custom value for procs warning */
