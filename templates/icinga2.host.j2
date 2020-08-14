@@ -3,7 +3,7 @@ object Host "{{ fqdn }}" {
   display_name = "{{ fqdn }}"
   import "generic-host"
 
-{% if contract_type is defined and contract_type is search("VPS") %}
+{% if contract_type is defined and contract_type is search("VPS") and "nosudo" not in group_names %}
   /* Enable running checks from the primary Icinga on the satellite. */
   vars.client_endpoint = name
 {% endif %}
@@ -56,7 +56,7 @@ object Host "{{ fqdn }}" {
     groups = [ {{ notification_groups | default('"megaphone"', true) | replace("&quot;",'"') }} ]
     users_non_urgent = [ "jon" ]
   }
-{% if contract_type is defined and contract_type is search("VPS") %}
+{% if contract_type is defined and contract_type is search("VPS") and "nosudo" not in group_names %}
   /* LOCAL MONITORING CUSTOM VARS */
   /* Set a custom value for procs warning */
   vars.procs_warning = 310
