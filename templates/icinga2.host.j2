@@ -45,6 +45,9 @@ object Host "{{ fqdn }}" {
     crm_site_key = "{{ lookup('passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/sitekey') }}"
     crm_api_key = "{{ lookup('passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/apikey') }}"
 {% endif %}
+{% if site.bare_url in groups['nextcloud'] %}
+    nextcloud = true
+{% endif %}
     site_env = "{{ site.env }}"
   }
 {% endif %}
