@@ -45,6 +45,9 @@ object Host "{{ fqdn }}" {
     {% endif -%}
 {% endif -%}
     cms = "{{ site.cms | lower }}"
+{% if site.contract_type is not search("WordPress Maintenance") %}
+    check_wp_updates = false
+{% endif -%}
 {% if site.contract_type is search("Civi Maintenance") and site.civicrm == 'Yes' %}
     crm_site_key = "{{ lookup('passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/sitekey') }}"
     {% if site.canonical_bare_url != None -%}
