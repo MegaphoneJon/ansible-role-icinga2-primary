@@ -7,9 +7,16 @@ object Host "{{ fqdn }}" {
   /* Enable running checks from the primary Icinga on the satellite. */
   vars.client_endpoint = name
 {% endif %}
-  
+
+{% if "firewalled" in group_names %}  
+  /* Use a custom check_command - ensure port 443 is open */
+  check_command = "tcp"
+  vars.tcp_address = "reg.delta.wisc.edu"
+  vars.tcp_port = 443
+{% else %}
   /* Specify the address attributes for checks e.g. `ssh` or `http`. */
   address = "{{ ansible_host }}"
+{% endif %}
 {% if ipv6 is defined %}
   address6 = "{{ ipv6 }}"
 {% endif %}
