@@ -52,7 +52,7 @@ object Host "{{ fqdn }}" {
     {% endif -%}
 {% endif -%}
     cms = "{{ site.cms | lower }}"
-{% if site.contract_type is not search("WordPress Maintenance") %}
+{% if site.contract_type is not search("WordPress Maintenance") and site.cms == 'WordPress' %}
     check_wp_updates = false
 {% endif -%}
 {% if site.contract_type is search("Civi Maintenance") and site.civicrm == 'Yes' %}
@@ -94,7 +94,9 @@ object Host "{{ fqdn }}" {
   }
   vars.mysql_hostname = "localhost"
   /* END LOCAL MONITORING CUSTOM VARS */
+{% endif %}
 
+{% if monitor_backupninja is defined and monitor_backupninja | bool  %}
   vars.has_backupninja = true
 {% endif %}
 {% if check_dnsbl is defined and check_dnsbl | bool  %}
