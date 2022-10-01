@@ -40,8 +40,8 @@ object Host "{{ fqdn }}" {
     http_string = "{{ site.website_string }}"
 {% endif %}
 {% if site.env == 'Test' %}
-    basic_auth_user = "megaphone"
-    basic_auth_password = "megaphone"
+    basic_auth_user = "{{ basic_auth_name }}"
+    basic_auth_password = "{{ basic_auth_password }}"
 {% endif %}
     /* CMS/CIVICRM MONITORING */
 {% if site.contract_type is search("(Backdrop|Drupal) Maintenance") and (site.cms == 'Drupal' or site.cms == 'Backdrop' or site.cms == 'Drupal8') %}
