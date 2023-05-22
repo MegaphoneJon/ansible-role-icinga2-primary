@@ -66,6 +66,9 @@ object Host "{{ fqdn }}" {
 {% if site.bare_url in groups['nextcloud'] -%}
     nextcloud = true
 {% endif -%}
+{% if site.monitor_backupninja is defined and site.monitor_backupninja | bool  -%}
+    has_backupninja = true
+{% endif %}
     site_env = "{{ site.env }}"
   }
 {% endif %}
