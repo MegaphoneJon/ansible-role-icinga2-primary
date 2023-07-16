@@ -86,8 +86,9 @@ object Host "{{ fqdn }}" {
   vars.procs_warning = 310
 
   /* Define disks and attributes for service apply rules in `services.conf`. */
-  vars.disks["disk /"] = {
-    disk_partitions = "/"
+{%- for item in ['/', '/var'] %} 
+  vars.disks["disk {{ item }}"] = {
+    disk_partitions = "{{ item }}"
 {% if disk_warning_percent is defined %}
     disk_wfree = "{{ disk_warning_percent }}%"
 {% endif %}
@@ -95,6 +96,7 @@ object Host "{{ fqdn }}" {
     disk_cfree = "{{ disk_critical_percent }}%"
 {% endif %}
   }
+{% endfor %}
   vars.mysql_hostname = "localhost"
   /* END LOCAL MONITORING CUSTOM VARS */
 {% endif %}
@@ -105,5 +107,7 @@ object Host "{{ fqdn }}" {
 {% if check_dnsbl is defined and check_dnsbl | bool  %}
   vars.check_dnsbl = true
 {% endif %}
+
+{% include "files/" + fqdn + "/icinga2.host-include.j2" ignore missing %}
 }
 
