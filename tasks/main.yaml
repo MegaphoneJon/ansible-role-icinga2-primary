@@ -1,3 +1,13 @@
+- name: Set the primary SLD
+  set_fact: 
+    slds:
+      - "{{ fqdn | regex_search('(?:.+\\.)?([^.]+\\.(?:com|org|net|coop|space|co.uk|edu|info|us))', '\\1') | first }}"
+
+- name: Set any additional SLDs
+  set_fact:
+    slds: "{{ slds + second_level_domains.split(', ') }}"
+  when: second_level_domains is defined
+
 - name: Create a host file on the primary Icinga
   template:
     src: "{{ template_src }}"

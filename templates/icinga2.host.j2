@@ -25,7 +25,7 @@ object Host "{{ fqdn }}" {
   vars.os = "Linux"
 
   /* Used for DNS expiration checks and for DNS blacklist checks */
-  vars.second_level_domains = ["{{ fqdn | regex_search('(?:.+\.)?([^.]+\.(?:com|org|net|coop|space|co.uk|edu|info|us))', '\\1') | first }}"]
+  vars.second_level_domains = ["{{ slds | join('", "')}}"]
 
   /* Define http vhost attributes for service apply rules in `services.conf`. */
 {% if sites is defined %}
@@ -52,7 +52,7 @@ object Host "{{ fqdn }}" {
     {% endif -%}
 {% endif -%}
     cms = "{{ site.cms | lower }}"
-{% if site.contract_type is not search("WordPress Maintenance") and site.cms == 'WordPress' %}
+{% if site.contract_type is not search("WordPress Maintenance") and site.cms == 'WordPress' -%}
     check_wp_updates = false
 {% endif -%}
 {% if site.contract_type is search("Civi Maintenance") and site.civicrm == 'Yes' %}
@@ -62,7 +62,7 @@ object Host "{{ fqdn }}" {
     {% else -%}
     crm_api_key = "{{ lookup('passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/civicrm_api_key') }}"
     {% endif -%}
-{% endif %}
+{% endif -%}
 {% if site.bare_url in groups['nextcloud'] -%}
     nextcloud = true
 {% endif -%}
