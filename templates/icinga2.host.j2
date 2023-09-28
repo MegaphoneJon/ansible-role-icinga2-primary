@@ -89,12 +89,8 @@ object Host "{{ fqdn }}" {
 {%- for item in ['/', '/var'] %} 
   vars.disks["disk {{ item }}"] = {
     disk_partitions = "{{ item }}"
-{% if disk_warning_percent is defined %}
-    disk_wfree = "{{ disk_warning_percent }}%"
-{% endif %}
-{% if disk_critical_percent is defined %}
-    disk_cfree = "{{ disk_critical_percent }}%"
-{% endif %}
+    disk_wfree = "{{ disk_warning_percent | default(12) }}%"
+    disk_cfree = "{{ disk_critical_percent | default(6) }}%"
   }
 {% endfor %}
   vars.mysql_hostname = "localhost"
