@@ -1,7 +1,18 @@
-- name: Set the primary SLD
-  set_fact: 
+- name: Get SLDs from website URLs
+  set_fact:
     slds:
-      - "{{ fqdn | regex_search('(?:.+\\.)?([^.]+\\.(?:com|org|net|coop|space|co.uk|edu|info|us))', '\\1') | first }}"
+      - "{{ item.value.bare_url | regex_search('(?:.+\\.)?([^.]+\\.(?:com|org|net|coop|space|co.uk|edu|info|us))', '\\1') | first }}"
+  when: item.value.env != 'Test'
+  loop: "{{ sites|default({})|dict2items }}"
+
+- name: Get SLD from the server FQDN
+  set_fact:
+    server_slds:
+      - "{{ fqdn | regex_search('(?:.+\\.)?([^.]+\\.(?:com|org|net|coop|space|co.uk|edu|info|us))', '\\1') | first}}"
+
+- name: combine domain and server SLDs
+  set_fact:
+    slds: "{{ slds|default([]) | union(server_slds) }}"
 
 - name: Set any additional SLDs
   set_fact:
