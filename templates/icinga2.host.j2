@@ -46,9 +46,9 @@ object Host "{{ fqdn }}" {
     /* CMS/CIVICRM MONITORING */
 {% if site.contract_type is search("(Backdrop|Drupal) Maintenance") and (site.cms == 'Drupal' or site.cms == 'Backdrop' or site.cms == 'Drupal8') %}
     {% if site.canonical_bare_url != None -%}
-    drupal_site_id = "{{ lookup('passwordstore', site.client + '/' + site.canonical_hostname + '/' + site.canonical_bare_url + '/nagioskey') }}"
+    drupal_site_id = "{{ lookup('community.general.passwordstore', site.client + '/' + site.canonical_hostname + '/' + site.canonical_bare_url + '/nagioskey') }}"
     {% else -%}
-    drupal_site_id = "{{ lookup('passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/nagioskey') }}"
+    drupal_site_id = "{{ lookup('community.general.passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/nagioskey') }}"
     {% endif -%}
 {% endif -%}
     cms = "{{ site.cms | lower }}"
@@ -56,11 +56,11 @@ object Host "{{ fqdn }}" {
     check_wp_updates = false
 {% endif -%}
 {% if site.contract_type is search("Civi Maintenance") and site.civicrm == 'Yes' %}
-    crm_site_key = "{{ lookup('passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/sitekey') }}"
+    crm_site_key = "{{ lookup('community.general.passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/sitekey') }}"
     {% if site.canonical_bare_url != None -%}
-    crm_api_key = "{{ lookup('passwordstore', site.client + '/' + site.canonical_hostname + '/' + site.canonical_bare_url + '/civicrm_api_key') }}"
+    crm_api_key = "{{ lookup('community.general.passwordstore', site.client + '/' + site.canonical_hostname + '/' + site.canonical_bare_url + '/civicrm_api_key') }}"
     {% else -%}
-    crm_api_key = "{{ lookup('passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/civicrm_api_key') }}"
+    crm_api_key = "{{ lookup('community.general.passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/civicrm_api_key') }}"
     {% endif -%}
 {% endif -%}
 {% if site.bare_url in groups['nextcloud'] -%}
