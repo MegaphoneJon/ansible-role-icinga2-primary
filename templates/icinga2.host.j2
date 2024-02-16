@@ -26,6 +26,9 @@ object Host "{{ fqdn }}" {
 
   /* Used for DNS expiration checks and for DNS blacklist checks */
   vars.second_level_domains = ["{{ slds | join('", "')}}"]
+  {% if dmarc_domains|length > 0 -%}
+  vars.dmarc_domains = ["{{ dmarc_domains | join('", "')}}"]
+  {%- endif -%}
 
   /* Define http vhost attributes for service apply rules in `services.conf`. */
 {% if sites is defined %}

@@ -10,14 +10,19 @@
     server_slds:
       - "{{ fqdn | regex_search('(?:.+\\.)?([^.]+\\.(?:com|org|net|coop|space|co.uk|edu|info|us))', '\\1') | first}}"
 
-- name: combine domain and server SLDs
+- name: combine domain and server SLDs + default DMARC domains to omit
   set_fact:
     slds: "{{ slds|default([]) | union(server_slds) }}"
+    dmarc_domains_to_omit: "{{ dmarc_domains_to_omit|default('', true) }}"
 
 - name: Set any additional SLDs
   set_fact:
-    slds: "{{ slds + second_level_domains.split(', ') }}"
+    slds: "{{ slds + second_level_domains.split(', ') | unique }}"
   when: second_level_domains is defined
+
+- name: Set dmarc_domains
+  set_fact:
+    dmarc_domains: "{{ slds | difference(dmarc_domains_to_omit) }}"
 
 - name: Create a host file on the primary Icinga
   template:
