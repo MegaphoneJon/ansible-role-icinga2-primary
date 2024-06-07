@@ -2,8 +2,6 @@
   shell: "service icinga2 checkconfig && service icinga2 restart"
   delegate_to: "{{ primary_icinga_server }}"
   become: yes
-  args:
-    warn: false
   vars:
     ansible_python_interpreter: /usr/bin/python3
 
