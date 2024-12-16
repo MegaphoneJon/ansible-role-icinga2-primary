@@ -53,7 +53,7 @@ object Host "{{ fqdn }}" {
     {% else -%}
     drupal_site_id = "{{ lookup('community.general.passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/nagioskey') }}"
     {% endif -%}
-{% endif -%}
+{% endif %}
     cms = "{{ site.cms | lower }}"
 {% if site.contract_type is not search("WordPress Maintenance") and site.cms == 'WordPress' -%}
     check_wp_updates = false
@@ -66,7 +66,7 @@ object Host "{{ fqdn }}" {
     crm_api_key = "{{ lookup('community.general.passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/civicrm_api_key') }}"
     {% endif -%}
 {% endif -%}
-{% if site.bare_url in groups['nextcloud'] -%}
+{% if site.bare_url in groups['nextcloud'] %}
     nextcloud = true
 {% endif -%}
 {% if site.monitor_backupninja is defined and site.monitor_backupninja | bool  -%}
