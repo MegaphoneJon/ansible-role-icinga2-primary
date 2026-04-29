@@ -53,7 +53,7 @@ object Host "{{ fqdn }}" {
     {% else -%}
     drupal_site_id = "{{ lookup('community.general.passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/nagioskey') }}"
     {% endif -%}
-{% endif %}
+{% endif -%}
     cms = "{{ site.cms | lower }}"
 {% if site.contract_type is not search("WordPress Maintenance") and site.cms == 'WordPress' -%}
     check_wp_updates = false
@@ -71,7 +71,11 @@ object Host "{{ fqdn }}" {
 {% endif -%}
 {% if site.monitor_backupninja is defined and site.monitor_backupninja | bool  -%}
     has_backupninja = true
-{% endif %}
+{% endif -%}
+{% if site.publicly_accessible == '0' -%}
+    prefer_nrpe = true
+    gitroot = "{{ site.gitroot }}"
+{% endif -%}
     site_env = "{{ site.env }}"
   }
 {% endif %}
