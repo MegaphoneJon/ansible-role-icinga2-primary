@@ -36,13 +36,13 @@ object Host "{{ fqdn }}" {
 {% if site.contract_type is search("Maintenance") %}
   vars.http_vhosts["{{ site.bare_url }}"] = {
     http_uri = "{{ site.homepage_uri | default("/",true) }}"
-    http_ssl = true
+    http_ssl = {{ site.publicly_accessible | default('1') | bool | lower }}
     http_vhost = "{{ site.bare_url }}"
     http_expect = "HTTP/1.1 200 OK"
 {% if site.website_string is defined %}
     http_string = "{{ site.website_string }}"
 {% endif %}
-{% if site.env == 'Test' %}
+{% if site.env == 'Test' or site.basic_auth_name is not none %}
     basic_auth_user = "{{ site.basic_auth_name | default(default_basic_auth_name, true) }}"
     basic_auth_password = "{{ site.basic_auth_password | default(default_basic_auth_password, true) }}"
 {% endif %}
@@ -53,7 +53,7 @@ object Host "{{ fqdn }}" {
     {% else -%}
     drupal_site_id = "{{ lookup('community.general.passwordstore', site.client + '/' + hostname + '/' + site.bare_url + '/nagioskey') }}"
     {% endif -%}
-{% endif -%}
+{% endif %}
     cms = "{{ site.cms | lower }}"
 {% if site.contract_type is not search("WordPress Maintenance") and site.cms == 'WordPress' -%}
     check_wp_updates = false
@@ -71,11 +71,15 @@ object Host "{{ fqdn }}" {
 {% endif -%}
 {% if site.monitor_backupninja is defined and site.monitor_backupninja | bool  -%}
     has_backupninja = true
-{% endif -%}
+{% endif %}
 {% if site.publicly_accessible == '0' -%}
-    prefer_nrpe = true
+    command_endpoint = "{{ fqdn}}"
+    publicly_accessible = false
+{% else -%}
+    publicly_accessible = true
+{% endif %}
     gitroot = "{{ site.gitroot }}"
-{% endif -%}
+    webroot = "{{ site.webroot }}"
     site_env = "{{ site.env }}"
   }
 {% endif %}
