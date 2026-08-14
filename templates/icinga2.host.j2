@@ -44,7 +44,7 @@ object Host "{{ fqdn }}" {
 {% endif %}
 {% if site.env == 'Test' or site.basic_auth_name is not none %}
     basic_auth_user = "{{ site.basic_auth_name | default(default_basic_auth_name, true) }}"
-    basic_auth_password = "{{ site.basic_auth_password | default(default_basic_auth_password, true) }}"
+    basic_auth_password = "{{ site.basic_auth_password | default(default_basic_auth_password, true) | replace('$', '$$') }}"
 {% endif %}
     /* CMS/CIVICRM MONITORING */
 {% if site.contract_type is search("(Backdrop|Drupal) Maintenance") and (site.cms == 'Drupal' or site.cms == 'Backdrop' or site.cms == 'Drupal8') %}
@@ -73,7 +73,7 @@ object Host "{{ fqdn }}" {
     has_backupninja = true
 {% endif %}
 {% if site.publicly_accessible == '0' -%}
-    command_endpoint = "{{ fqdn}}"
+    command_endpoint = "{{ fqdn }}"
     publicly_accessible = false
 {% else -%}
     publicly_accessible = true
