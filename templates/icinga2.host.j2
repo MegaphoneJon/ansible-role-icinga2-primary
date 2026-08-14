@@ -15,7 +15,7 @@ object Host "{{ fqdn }}" {
   vars.tcp_port = 443
 {% else %}
   /* Specify the address attributes for checks e.g. `ssh` or `http`. */
-  address = "{{ ansible_host }}"
+  address = "{{ ip4_address }}"
 {% endif %}
 {% if ipv6 is defined %}
   address6 = "{{ ipv6 }}"
